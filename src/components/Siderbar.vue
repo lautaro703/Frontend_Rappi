@@ -1,7 +1,7 @@
 <template>
  <div class="PagPrincipal">
  <div class="contenedorArriba">
-  <img src="../assets/channels4_profile.jpg" alt="Rappi Logo" class="logo"/>
+  <img src="../assets/WhatsApp Image 2025-10-31 at 9.37.54 PM.jpeg" alt="Rappi Logo" class="logo"/>
   <label class="titulo">Bienvenido a Rappi</label>
   <br/>
   <input type="text" placeholder="¿Que estas pensando en buscar?" class="buscador"/>
@@ -11,10 +11,15 @@
     <option value="categorias">Categorías</option>
   </select>
  </div>
+ <router-link to="/pedidos">
+ <button>
+  Pedidos
+ </button>
+ </router-link>
   <div class="contenedores" v-for="value in 1">
       <router-link to="/restaurantes">
       <button class="Boton">
-       <img src="../assets/channels4_profile.jpg" alt="Logo del restaurante" class="imagenDeOpcion"/><br/>
+       <img src="../assets/WhatsApp Image 2025-10-31 at 9.37.54 PM.jpeg" alt="Logo del restaurante" class="imagenDeOpcion"/><br/>
         <label>Nombre</label><br/>
         <label>Dirección</label><br/>
         <label>Clasificación</label><br/>
@@ -53,7 +58,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom:100px;
- }  
+ }
 .titulo{
     font-size: 50px;
     font-weight: bold;
