@@ -29,9 +29,9 @@
     background-color: rgb(255, 255, 255);
 }
 .imagenDeOpcion{
-    border-radius: 10px;
-    width: 200px;
-    height: 100px;
+    border-radius: 20px;
+    width: 100%;
+    height: 100%;
 }
 .OpcionBoton{
     width: 300px;
@@ -44,7 +44,6 @@
     height: 200px;
     background-color: rgb(255, 234, 234);
     position: center;
-    margin: 30px;
     border-radius: 20px;
  }
 .contenedorArriba{
