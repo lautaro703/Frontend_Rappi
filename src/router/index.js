@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Siderbar from '../components/Siderbar.vue'
-import Pedidos from '../Modules/Pedidos/Components/Pedidos.vue';
+import PedidosNacho from '@/Modules/Pedidos/Components/ListaPedidos.vue'
 import Restaurantes from '@/Modules/Restaurante/Components/Restaurantes.vue';
+
 
 const routes = [
   {
@@ -12,7 +13,7 @@ const routes = [
     {
      path: '/pedidos',
      name: 'Pedidos',
-     component: Pedidos
+     component: PedidosNacho
     },
     {
       path: '/restaurantes',
