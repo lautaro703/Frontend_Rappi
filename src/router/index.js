@@ -1,25 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Siderbar from '../components/Siderbar.vue'
-import PedidosNacho from '@/Modules/Pedidos/Components/ListaPedidos.vue'
-import Restaurantes from '@/Modules/Restaurante/Components/Restaurantes.vue';
-
 
 const routes = [
-  {
-    path: '/',
-    name: 'Siderbar',
-    component: Siderbar
+    {
+      path: '/',
+      name: 'login',
+      component: () => import('../views/LoginView.vue'),
     },
     {
-     path: '/pedidos',
-     name: 'Pedidos',
-     component: PedidosNacho
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue'),
     },
     {
       path: '/restaurantes',
-      name: 'Restaurantes',
-      component: Restaurantes
-    }
+      name: 'restaurantes',
+      component: () => import('../Modules/Restaurante/Components/RestaurantesView.vue'),
+    },
+    {
+      path: '/pedidos',
+      name: 'listapedidos',
+      component: () => import('../Modules/Pedidos/Components/ListaPedidosView.vue'),
+    },
+    {
+      path: '/menus',
+      name: 'menus',
+      component: () => import('../Modules/Menus/Components/MenusView.vue'),
+    },
 ]
 
 const router = createRouter({

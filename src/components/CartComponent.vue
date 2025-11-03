@@ -1,6 +1,5 @@
-<script setup>
+<script setup></script>
 
-</script>
 <template>
   <div class="carrito-container">
     <h1 class="title">Carrito</h1>
@@ -55,8 +54,6 @@
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 .carrito-container {
