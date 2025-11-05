@@ -1,72 +1,105 @@
 <script setup>
 import SidebarComponent from '@/components/SidebarComponent.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
+import axios from 'axios'
 
-const cantidad = ref(0)
+const categorias = ref([]);
+const cantidades = ref({})
 
-async function suma() {
-  cantidad.value++
+onMounted(async () => {
+  try{
+    const respuesta = await axios.get("http://localhost:3000/api/menus")
+    categorias.value = respuesta.data
+
+   categorias.value.forEach(cat => {
+      cat.items.forEach(item => {
+        cantidades.value[item.id] = 0
+      })
+    });
+  }
+  catch(error){
+    console.log(error)
+  }
+})
+
+async function suma(id) {
+  cantidades.value[id]++
 }
-async function resta() {
-  if (cantidad.value > 0) {
-    cantidad.value--
+async function resta(id) {
+  if (cantidades.value[id] > 0) {
+    cantidades.value[id]--
   }
 }
 
-async function agregar() {
-  alert(`Agregado al pedido ${cantidad.value}`)
-  cantidad.value = 0
+async function agregar(item) {
+  alert(`Agregado al pedido: ${item.name}, Cantidad:${cantidades.value[item.id]}`)
+  cantidades.value[item.id] = 0
 }
+
 </script>
 
 <template>
   <div class="flex">
     <SidebarComponent />
+
     <div class="w-screen h-screen overflow-auto">
-      <div class="relative w-full max-w-[1460px] h-[250px] mt-5 rounded-2xl">
+ 
+      <div class="relative w-full max-w-[1145px] h-[250px] mt-5 rounded-2xl">
         <div class="containerRestaurante">
           <div class="contenido">
             <h1 class="titulo">La Trattoria di Luc</h1>
             <p class="subtitulo">Sabores que iluminan el alma</p>
-            <p class="categoria">Categoría: Cocina Italiana Tradicional</p>
+            <button class="volver"><RouterLink to="/restaurantes">◀</RouterLink></button>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-wrap w-full justify-between gap-[30px] max-w-[1460px] mt-8">
-        <div class="opcion" v-for="contador in 1" :key="contador">
-          <div class="w-full h-[135px] bg-[#2C2C34] rounded-2xl mb-4" />
+   <div class="relative w-full max-w-[1145px] mt-8 rounded-2xl">
 
-          <div class="info">
-            <h3>Spaghetti a la Bolognesa</h3>
-            <p>
-              Clásica pasta italiana con salsa de carne cocida lentamente en tomate, cebolla y
-              especias.
-            </p>
+    <div v-for="categoria in categorias" :key="categoria.id" class="mb-10">
+     <h2 class="categoriaDiseño">{{ categoria.name }}</h2>
 
-            <h3>Tallarines con Salsa de Hongos</h3>
-            <p>Tallarines al huevo con salsa de champiñones salteados en manteca y vino blanco.</p>
+       <div class="flex flex-wrap w-full justify-between gap-[30px] max-w-[1145px] mt-3">
+         <div class="opcion" v-for="item in categoria.items" :key="item.id">
+          
+          <div class="w-full h-[135px] bg-[#2C2C34] rounded-2xl mb-4"></div>
+           <div class="info">
+            <h3><strong>{{ item.name }}</strong></h3>
+            <p>{{ item.description }}</p>
 
             <div class="precio">
-              <h2>$10.800</h2>
-              <span>1120 kcal</span>
-              <span class="disponible">Available</span>
+              <h2>${{ item.price }}</h2>
+              <p>{{ item.calories }} cal</p>
+              <span class="disponible">{{ item.available }}</span>
             </div>
-          </div>
+           </div>
 
           <div class="acciones">
-            <button @click="resta" class="flecha">◀</button>
-            <span class="cantidad">{{ cantidad }}</span>
-            <button @click="suma" class="flecha">▶</button>
-            <button @click="agregar" class="boton_agregar">AÑADIR</button>
+           <button @click="resta(item.id)" class="flecha">◀</button>
+           <span class="cantidad">{{ cantidades[item.id] }}</span>
+           <button @click="suma(item.id)" class="flecha">▶</button>
+           <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
           </div>
+         </div>
         </div>
       </div>
     </div>
+   </div>
   </div>
 </template>
 
 <style scoped>
+.categoriaDiseño{
+  color: #ffffff;
+}
+.volver{
+  background-color: #767676;
+  position: left;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
 .containerRestaurante {
   position: absolute;
   width: 100%;
