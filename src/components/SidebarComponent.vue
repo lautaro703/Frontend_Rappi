@@ -1,4 +1,27 @@
-<script></script>
+<script setup>
+import axios from 'axios';
+
+
+axios.get("/api/usuario") //Esta liena dice "Anda a buscar informacion en la direccion ... usando el metodo GET. /apu/usuario es la URL del endpoint"
+  .then(response => { //Se ejecuta si la peticion fue exitosa, Axios devuelve un objeto response que contiene, el contenido del servidor, codigo http, las cabeceras de la respuesta
+    const nombreUsuario = response.data.nombreUsuario; //obtiene el nombre
+    const rol = response.data.rol; // obtiene el rol
+    const email = response.data.email;
+
+    //console.log(Usuario: ${nombreUsuario}, Rol: ${rol}, Email: ${email});
+
+    document.getElementById("nombre").textContent = nombreUsuario;
+    document.getElementById("rol").textContent = rol;
+    document.getElementById("email").textContent = email;
+  })
+  .catch(error => {
+    console.error("Error al obtener usuario:", error);
+  });
+
+
+
+
+</script>
 
 <template>
   <main class="sidebar">
@@ -16,19 +39,18 @@
           <span class="star" data-value="3">★</span>
           <span class="star" data-value="4">★</span>
           <span class="star" data-value="5">★</span>
+
         </div>
         <p id="ratingValue" class="rating-value font-lora">Selecciona una puntuación</p>
       </div>
 
       <div class="category text-white">
-        <h3 class="font-lora">Categoría</h3>
-        <ul id="category-list">
-          <li data-category="entradas" class="font-lora">Entradas</li>
-          <li data-category="cenas" class="font-lora">Desayuno</li>
-          <li data-category="cenas" class="font-lora">Almuerzo</li>
-          <li data-category="postres" class="font-lora">Cena</li>
-          <li data-category="almuerzo" class="font-lora">Postres</li>
-        </ul>
+        <h3 class="font-lora">Vistas</h3>
+          <div class="w-full h-auto flex flex-wrap">
+            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-[40px] text-center bg- rounded-md" href="/pedidos">Pedidos</a>
+            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-[40px] text-center bg- rounded-md" href="/restaurantes">Restaurantes</a>
+            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-[40px] text-center bg- rounded-md" href="/menus">Menus</a>
+          </div>
       </div>
     </div>
 
@@ -135,12 +157,6 @@ h2 {
 .category h3 {
   font-size: 25px;
   margin-bottom: 10px;
-}
-
-.category ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .category li {
