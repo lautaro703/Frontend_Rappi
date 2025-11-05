@@ -1,40 +1,22 @@
 <script setup>
-import { ref, computed } from 'vue'
 import SidebarComponent from '@/components/SidebarComponent.vue'
+import { ref } from 'vue';
+import axios from 'axios'
 
-// === REACTIVIDAD ===
-const busqueda = ref('')
-const categoriaSeleccionada = ref('')
+const datosRestaurantes = ref([])
 
-// === DATOS ===
-const restaurantes = ref([
-])
-
-// === FILTRO ===
-const restaurantesFiltrados = computed(() => {
-  return restaurantes.value.filter(r => {
-    const coincideBusqueda = r.nombre.toLowerCase().includes(busqueda.value.toLowerCase()) ||
-                            r.descripcion.toLowerCase().includes(busqueda.value.toLowerCase())
-    const coincideCategoria = !categoriaSeleccionada.value || r.categoria === categoriaSeleccionada.value
-    return coincideBusqueda && coincideCategoria
-  })
-})
-
-// === CLASES DINÁMICAS ===
-const getTagClass = (categoria) => {
-  const clases = {
-    entradas: 'bg-purple-600',
-    desayuno: 'bg-orange-600',
-    almuerzo: 'bg-yellow-600',
-    cena: 'bg-blue-600',
-    postres: 'bg-pink-600'
+async function CargarRestaurantes() {
+  try{
+   const response = await axios.get('http://localhost:3000/api/restaurant');
+   datosRestaurantes.value = response.data
   }
-  return clases[categoria] || 'bg-gray-600'
+  catch (error){
+    console.log('error al cargar los datos ', error)
+  }
+  
 }
+ CargarRestaurantes();
 
-const formatearCategoria = (cat) => {
-  return cat.charAt(0).toUpperCase() + cat.slice(1)
-}
 </script>
 
 <template>
@@ -69,30 +51,14 @@ const formatearCategoria = (cat) => {
         </select>
       </div>
 
-      <!-- Grid de restaurantes -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 pb-8">
-        <div
-          v-for="restaurante in restaurantesFiltrados"
-          :key="restaurante.id"
-          class="card bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-transform duration-300 hover:-translate-y-1"
-        >
-          <img
-            :src="restaurante.imagen"
-            :alt="restaurante.nombre"
-            class="w-full h-48 object-cover"
-          />
-          <div class="p-4">
-            <h3 class="text-lg font-bold">{{ restaurante.nombre }}</h3>
-            <p class="text-gray-400 text-sm">{{ restaurante.descripcion }}</p>
-            <div class="flex items-center mt-2">
-              <span class="text-yellow-400 text-lg">{{ restaurante.estrellas }}</span>
-            </div>
-            <span
-              class="tag inline-block mt-2 px-3 py-1 text-xs rounded-full text-white font-medium"
-              :class="getTagClass(restaurante.categoria)"
-            >
-              {{ formatearCategoria(restaurante.categoria) }}
-            </span>
+      <div class="grid grid-cols-3 gap-y-8 justify-center">
+        <div class="card" v-for="restaurante in datosRestaurantes" :key="restaurante.id" >
+          <div class="card-content">
+            <RouterLink to="/menus">
+            <h3>{{restaurante.name}}</h3>
+            <p>{{ restaurante.description }}</p>
+            <div class="stars">{{ restaurante.rating }}</div>
+            </RouterLink>
           </div>
         </div>
       </div>
