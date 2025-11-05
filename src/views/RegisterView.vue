@@ -1,4 +1,42 @@
-<script></script>
+<script setup>
+import { ref } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const phone = ref('')
+const loading = ref(false)
+const error = ref('')
+const router = useRouter()
+
+const EnviarUser = async () => {
+  error.value = ''
+  loading.value = true
+  try {
+    const {data} = await axios.post('http://localhost:3000/api/auth/register', {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      phone: phone.value
+    })
+    if (data.access_token) {
+      localStorage.setItem('token', data.access_token)
+      router.push('/')
+    } else {
+      throw new Error('Registration failed')
+    }
+
+  } catch (err) {
+    error.value = err.response?.data?.message || 'An error occurred during registration'
+  } finally {
+    loading.value = false
+  }
+}
+
+
+</script>
 
 <template>
   <body class="flex justify-center items-center w-screen h-screen">
@@ -8,7 +46,8 @@
     <div class="z-0 flex flex-col justify-center items-center gap-[60px]">
       <div class="flex justify-center flex-col items-center gap-[70px]">
         <h1 class="text-white font-lora font-bold text-[64px]">Sign Up</h1>
-        <form @submit.prevent="submitForm">
+        <form @submit.prevent="EnviarUser"
+        class=" flex flex-col items-center gap-12">
           <div class="flex flex-col gap-5">
             <input
               v-model="name"
@@ -41,12 +80,12 @@
               required
             />
           </div>
+          <button class="bg-[#FF7043] w-[330px] h-20 rounded-xl" type="submit">
+            <p class="font-lora text-[36px] text-white font-medium">Sign Up</p>
+          </button>
         </form>
-      </div>
-      <button class="bg-[#FF7043] w-[330px] h-20 rounded-xl" type="submit">
-        <p class="font-lora text-[36px] text-white font-medium">Sign Up</p>
-      </button>
-      <div class="flex gap-1.5">
+        </div>
+        <div class="flex gap-1.5">
         <p class="text-[#A0A0A5] font-lora font-semibold text-lg opacity-50">
           Do you have a Account?
         </p>
