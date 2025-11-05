@@ -45,43 +45,54 @@ async function agregar(item) {
 
     <div class="w-screen h-screen overflow-auto">
  
-      <div class="relative w-full max-w-[1460px] h-[250px] mt-5 rounded-2xl">
+      <div class="relative w-full max-w-[1145px] h-[250px] mt-5 rounded-2xl">
         <div class="containerRestaurante">
           <div class="contenido">
             <h1 class="titulo">La Trattoria di Luc</h1>
             <p class="subtitulo">Sabores que iluminan el alma</p>
-            <button class="volver">
-              <RouterLink to="/restaurantes">◀</RouterLink>
-            </button>
+            <button class="volver"><RouterLink to="/restaurantes">◀</RouterLink></button>
           </div>
         </div>
       </div>
 
-      <div class="flex flex-wrap w-full justify-between gap-[30px] max-w-[1460px] mt-8">
-        <div class="opcion" v-for="item in categorias.flatMap(c => c.items)" :key="item.id">
+   <div class="relative w-full max-w-[1145px] mt-8 rounded-2xl">
+
+    <div v-for="categoria in categorias" :key="categoria.id" class="mb-10">
+     <h2 class="categoriaDiseño">{{ categoria.name }}</h2>
+
+       <div class="flex flex-wrap w-full justify-between gap-[30px] max-w-[1145px] mt-3">
+         <div class="opcion" v-for="item in categoria.items" :key="item.id">
+          
           <div class="w-full h-[135px] bg-[#2C2C34] rounded-2xl mb-4"></div>
-          <div class="info">
-            <h3>{{ item.name }}</h3>
+           <div class="info">
+            <h3><strong>{{ item.name }}</strong></h3>
             <p>{{ item.description }}</p>
+
             <div class="precio">
               <h2>${{ item.price }}</h2>
-              <span>{{ item.calories }} cal</span>
-              <span class="disponible">{{ item.avilable }}</span>
+              <p>{{ item.calories }} cal</p>
+              <span class="disponible">{{ item.available }}</span>
             </div>
-          </div>
+           </div>
+
           <div class="acciones">
-            <button @click="resta(item.id)" class="flecha">◀</button>
-            <span class="cantidad">{{ cantidades[item.id] }}</span>
-            <button @click="suma(item.id)" class="flecha">▶</button>
-            <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
+           <button @click="resta(item.id)" class="flecha">◀</button>
+           <span class="cantidad">{{ cantidades[item.id] }}</span>
+           <button @click="suma(item.id)" class="flecha">▶</button>
+           <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
           </div>
+         </div>
         </div>
       </div>
     </div>
+   </div>
   </div>
 </template>
 
 <style scoped>
+.categoriaDiseño{
+  color: #ffffff;
+}
 .volver{
   background-color: #767676;
   position: left;
