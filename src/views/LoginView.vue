@@ -1,22 +1,57 @@
-<script></script>
+<script setup>
+import { ref } from 'vue';
+import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const loading = ref(false)
+const router = useRouter()
+
+const handleLogin = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const {data} = await axios.post('http://localhost:3000/api/auth/login', {
+      email: email.value,
+      password: password.value,
+  }
+)
+localStorage.setItem('token', data.token)
+router.push('/restaurantes')
+  } catch (err) {
+    error.value = err.response.data.message || 'An error occurred'
+  } finally {
+    loading.value = false
+
+  }
+}
+
+
+</script>
 
 <template>
   <body class="flex justify-center items-center w-screen h-screen">
     <div
       class="w-[762px] h-[610px] bg-[#1B1B22] drop-shadow-[0_10px_10px_rgba(44,44,52,100)] rounded-2xl absolute"
     />
-    <div class="z-0 flex flex-col justify-center items-center gap-[60px]">
+    <form class="z-0 flex flex-col justify-center items-center gap-[60px]" @submit.prevent="handleLogin">
       <div class="flex justify-center flex-col items-center gap-[70px]">
         <h1 class="text-white font-lora font-bold text-[64px]">Log In</h1>
+
+
         <div class="flex flex-col gap-5">
           <input
             class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
             placeholder="Email"
+            v-model="email"
           />
           <input
             class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
             type="password"
             placeholder="Password"
+            v-model="password"
           />
         </div>
       </div>
@@ -33,7 +68,7 @@
           >Register Now!</a
         >
       </div>
-    </div>
+    </form>
   </body>
 </template>
 
