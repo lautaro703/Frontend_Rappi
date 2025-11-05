@@ -1,5 +1,22 @@
 <script setup>
-import SidebarComponent from '@/components/SidebarComponent.vue';
+import SidebarComponent from '@/components/SidebarComponent.vue'
+import { ref } from 'vue';
+import axios from 'axios'
+
+const datosRestaurantes = ref([])
+
+async function CargarRestaurantes() {
+  try{
+   const response = await axios.get('http://localhost:3000/api/restaurant');
+   datosRestaurantes.value = response.data
+  }
+  catch (error){
+    console.log('error al cargar los datos ', error)
+  }
+  
+}
+ CargarRestaurantes();
+
 </script>
 
 <template>
@@ -12,11 +29,13 @@ import SidebarComponent from '@/components/SidebarComponent.vue';
       </div>
 
       <div class="grid grid-cols-3 gap-y-8 justify-center">
-        <div class="card">
+        <div class="card" v-for="restaurante in datosRestaurantes" :key="restaurante.id" >
           <div class="card-content">
-            <h3>La Trattoria di Luc</h3>
-            <p>Cocina Italiana Tradicional</p>
-            <div class="stars">★★★★☆</div>
+            <RouterLink to="/menus">
+            <h3>{{restaurante.name}}</h3>
+            <p>{{ restaurante.description }}</p>
+            <div class="stars">{{ restaurante.rating }}</div>
+            </RouterLink>
           </div>
         </div>
       </div>
