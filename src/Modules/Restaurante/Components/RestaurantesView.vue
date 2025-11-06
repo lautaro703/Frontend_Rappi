@@ -1,19 +1,21 @@
 <script setup>
 import SidebarComponent from '@/components/SidebarComponent.vue'
 import { ref } from 'vue';
-import axios from 'axios'
+import api from '@/api';
+import { useAuthStore } from '@/store/auth';
 
+const auth = useAuthStore()
 const datosRestaurantes = ref([])
 
 async function CargarRestaurantes() {
   try{
-   const response = await axios.get('http://localhost:3000/api/restaurant');
+   const response = await api.get('/restaurantes');
    datosRestaurantes.value = response.data
   }
   catch (error){
     console.log('error al cargar los datos ', error)
   }
-  
+
 }
  CargarRestaurantes();
 
@@ -23,24 +25,24 @@ async function CargarRestaurantes() {
   <main class="flex">
     <SidebarComponent />
 
-    <div class="h-screen w-screen overflow-auto bg-gray-900 text-white">
-      <!-- Búsqueda -->
+    <div class="h-screen w-screen overflow-auto text-white pr-5">
+
       <div class="search-bar p-4 relative">
-        <span class="absolute left-8 top-1/2 transform -translate-y-1/2 text-gray-400">Search</span>
+        <!-- <span class="absolute left-8 top-1/2 transform -translate-y-1/2 text-gray-400">Search</span> -->
         <input
           v-model="busqueda"
           type="text"
           placeholder="Buscar restaurante..."
-          class="w-full p-3 pl-12 bg-gray-800 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full p-3 pl-12 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2"
         />
       </div>
 
-      <!-- Filtro de categoría -->
+
       <div class="px-4 mb-6">
         <h2 class="text-xl font-bold mb-3">Tipo de comida</h2>
         <select
           v-model="categoriaSeleccionada"
-          class="w-full p-3 bg-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="w-full p-3 bg-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 "
         >
           <option value="">Todos</option>
           <option value="entradas">Entradas</option>
@@ -51,14 +53,22 @@ async function CargarRestaurantes() {
         </select>
       </div>
 
-      <div class="grid grid-cols-3 gap-y-8 justify-center">
+      <div class="grid grid-cols-3 gap-y-8 ">
         <div class="card" v-for="restaurante in datosRestaurantes" :key="restaurante.id" >
           <div class="card-content">
             <RouterLink to="/menus">
             <h3>{{restaurante.name}}</h3>
             <p>{{ restaurante.description }}</p>
             <div class="stars">{{ restaurante.rating }}</div>
-            </RouterLink>
+          </RouterLink>
+          <!--
+          Esto nos hizo sufrir como condenados
+          Problema? no mostraba el boton
+          Solucion? no estaba en el dto del backend.......
+          -->
+          <div v-if="auth.user?.role === 'VENDOR'">
+            <button class="bg-red-500 w-[100px] h-8 rounded-md">Eliminar</button>
+          </div>
           </div>
         </div>
       </div>
@@ -66,12 +76,7 @@ async function CargarRestaurantes() {
   </main>
 </template>
 
-<style scoped>
-/* Opcional: mejorar el icono */
-.search-bar input::placeholder {
-  color: #9ca3af;
-}
-</style>
+
 <style>
 .search-bar {
   background-color: #1e1e1e;
@@ -202,23 +207,6 @@ h2 {
 
 .btn-pedidos:hover {
   background: #ff6b6b;
-}
-
-.sidebar-select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: none;
-    background: #1f1f1f;
-    color: white;
-    font-size: 17px;
-    cursor: pointer;
-}
-
-.sidebar-select:focus {
-    outline: none;
-    background: #2a2a2a;
 }
 
 </style>

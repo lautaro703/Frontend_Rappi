@@ -1,24 +1,16 @@
 <script setup>
-import axios from 'axios';
 
 
-axios.get("/api/usuario") //Esta liena dice "Anda a buscar informacion en la direccion ... usando el metodo GET. /apu/usuario es la URL del endpoint"
-  .then(response => { //Se ejecuta si la peticion fue exitosa, Axios devuelve un objeto response que contiene, el contenido del servidor, codigo http, las cabeceras de la respuesta
-    const nombreUsuario = response.data.nombreUsuario; //obtiene el nombre
-    const rol = response.data.rol; // obtiene el rol
-    const email = response.data.email;
+import { useAuthStore } from '@/store/auth'
+import { useRouter } from 'vue-router'
 
-    //console.log(Usuario: ${nombreUsuario}, Rol: ${rol}, Email: ${email});
+const auth = useAuthStore()
+const router = useRouter()
 
-    document.getElementById("nombre").textContent = nombreUsuario;
-    document.getElementById("rol").textContent = rol;
-    document.getElementById("email").textContent = email;
-  })
-  .catch(error => {
-    console.error("Error al obtener usuario:", error);
-  });
-
-
+const logout = () => {
+  auth.logout()
+  router.push('/')
+}
 
 
 </script>
@@ -46,10 +38,10 @@ axios.get("/api/usuario") //Esta liena dice "Anda a buscar informacion en la dir
 
       <div class="category text-white">
         <h3 class="font-lora">Vistas</h3>
-          <div class="w-full h-auto flex flex-wrap">
-            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-[40px] text-center bg- rounded-md" href="/pedidos">Pedidos</a>
-            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-[40px] text-center bg- rounded-md" href="/restaurantes">Restaurantes</a>
-            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-[40px] text-center bg- rounded-md" href="/menus">Menus</a>
+          <div class="w-full h-auto flex flex-wrap gap-4">
+            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-10 text-center rounded-md" href="/pedidos">Pedidos</a>
+            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-10 text-center rounded-md" href="/restaurantes">Restaurantes</a>
+            <a class="font-lora w-full bg-[#2c2c34] text-[16px] h-10 text-center rounded-md" href="/menus">Menus</a>
           </div>
       </div>
     </div>
@@ -57,12 +49,11 @@ axios.get("/api/usuario") //Esta liena dice "Anda a buscar informacion en la dir
     <div class="profile">
       <div class="status"></div>
       <div class="info">
-        <div class="name">Mili</div>
-        <div class="role">Cliente</div>
+        <div class="name">{{ auth.user?.name }}</div>
       </div>
       <div class="flex gap-3">
-        <img class="w-6 h-6" src="/public//cart.png" />
-        <img class="w-6 h-6" src="/public/LogOut.png" />
+          <img class="w-6 h-6" @click="logout" src="/public//cart.png" />
+          <img class="w-6 h-6" @click="logout" src="/public/LogOut.png" />
       </div>
     </div>
   </main>
@@ -78,6 +69,7 @@ axios.get("/api/usuario") //Esta liena dice "Anda a buscar informacion en la dir
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  z-index: 0;
   top: 0;
   bottom: 0;
 }
