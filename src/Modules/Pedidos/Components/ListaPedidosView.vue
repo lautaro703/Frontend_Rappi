@@ -1,82 +1,84 @@
 <script setup>
+//import CartComponent from '@/components/CartComponent.vue';
 import SidebarComponent from '@/components/SidebarComponent.vue'
 
-document.addEventListener("DOMContentLoaded", () => {
-  const estado = document.getElementById("estado").textContent.trim();
-  const tieneResenaTexto = document.getElementById("resena").textContent.trim();
-
-  // Detectar si ya tiene reseña (puede decir "Sí", "Sí (4 estrellas)", etc.)
-  const tieneResena = tieneResenaTexto !== "No";
-
-  const seccionCalificacion = document.getElementById("seccion-calificacion");
-
-  // Mostrar solo si está "Entregado" y NO tiene reseña
-  if (estado === "Entregado" && !tieneResena) {
-    seccionCalificacion.classList.remove("hidden");
-  } else {
-    seccionCalificacion.classList.add("hidden");
-  }
-
-  // === Sistema de estrellas ===
-  const stars = document.querySelectorAll(".star");
-  const calificacionTexto = document.getElementById("calificacion-texto");
-  let calificacionSeleccionada = 0;
-
-  stars.forEach(star => {
-    star.addEventListener("mouseover", () => {
-      const value = parseInt(star.dataset.value);
-      resaltarEstrellas(value);
-    });
-
-    star.addEventListener("click", () => {
-      calificacionSeleccionada = parseInt(star.dataset.value);
-      calificacionTexto.textContent = calificacionSeleccionada;
-      resaltarEstrellas(calificacionSeleccionada, true);
-    });
-
-    star.addEventListener("mouseout", () => {
-      resaltarEstrellas(calificacionSeleccionada, true);
-    });
-  });
-
-  function resaltarEstrellas(hasta, permanente = false) {
-    stars.forEach(s => {
-      const value = parseInt(s.dataset.value);
-      if (permanente) {
-        s.classList.toggle("selected", value <= hasta);
-      } else {
-        s.classList.toggle("hovered", value <= hasta);
-      }
-    });
-  }
-
-  // === Enviar calificación ===
-  document.getElementById("enviar-calificacion").addEventListener("click", () => {
-    if (calificacionSeleccionada === 0) {
-      alert("Por favor, selecciona una calificación con las estrellas.");
-      return;
-    }
-
-    const comentario = document.getElementById("comentario").value.trim();
-
-    // Simular envío
-    console.log("Calificación enviada:", {
-      estrellas: calificacionSeleccionada,
-      comentario: comentario || "Sin comentario"
-    });
-
-    // Actualizar UI para indicar que ya tiene reseña
-    document.getElementById("resena").textContent = `Sí (${calificacionSeleccionada} estrellas)`;
-
-    // Ocultar formulario y mostrar éxito
-    seccionCalificacion.classList.add("hidden");
-    document.getElementById("mensaje-exito").classList.remove("hidden");
-  });
-});
+//document.addEventListener("DOMContentLoaded", () => {
+//  const estado = document.getElementById("estado").textContent.trim();
+//  const tieneResenaTexto = document.getElementById("resena").textContent.trim();
+//
+//  // Detectar si ya tiene reseña (puede decir "Sí", "Sí (4 estrellas)", etc.)
+//  const tieneResena = tieneResenaTexto !== "No";
+//
+//  const seccionCalificacion = document.getElementById("seccion-calificacion");
+//
+//  // Mostrar solo si está "Entregado" y NO tiene reseña
+//  if (estado === "Entregado" && !tieneResena) {
+//    seccionCalificacion.classList.remove("hidden");
+//  } else {
+//    seccionCalificacion.classList.add("hidden");
+//  }
+//
+//  // === Sistema de estrellas ===
+//  const stars = document.querySelectorAll(".star");
+//  const calificacionTexto = document.getElementById("calificacion-texto");
+//  let calificacionSeleccionada = 0;
+//
+//  stars.forEach(star => {
+//    star.addEventListener("mouseover", () => {
+//      const value = parseInt(star.dataset.value);
+//      resaltarEstrellas(value);
+//    });
+//
+//    star.addEventListener("click", () => {
+//      calificacionSeleccionada = parseInt(star.dataset.value);
+//      calificacionTexto.textContent = calificacionSeleccionada;
+//      resaltarEstrellas(calificacionSeleccionada, true);
+//    });
+//
+//    star.addEventListener("mouseout", () => {
+//      resaltarEstrellas(calificacionSeleccionada, true);
+//    });
+//  });
+//
+//  function resaltarEstrellas(hasta, permanente = false) {
+//    stars.forEach(s => {
+//      const value = parseInt(s.dataset.value);
+//      if (permanente) {
+//        s.classList.toggle("selected", value <= hasta);
+//      } else {
+//        s.classList.toggle("hovered", value <= hasta);
+//      }
+//    });
+//  }
+//
+//  // === Enviar calificación ===
+//  document.getElementById("enviar-calificacion").addEventListener("click", () => {
+//    if (calificacionSeleccionada === 0) {
+//      alert("Por favor, selecciona una calificación con las estrellas.");
+//      return;
+//    }
+//
+//    const comentario = document.getElementById("comentario").value.trim();
+//
+//    // Simular envío
+//    console.log("Calificación enviada:", {
+//      estrellas: calificacionSeleccionada,
+//      comentario: comentario || "Sin comentario"
+//    });
+//
+//    // Actualizar UI para indicar que ya tiene reseña
+//    document.getElementById("resena").textContent = `Sí (${calificacionSeleccionada} estrellas)`;
+//
+//    // Ocultar formulario y mostrar éxito
+//    seccionCalificacion.classList.add("hidden");
+//    document.getElementById("mensaje-exito").classList.remove("hidden");
+//  });
+//});
 
 </script>
 
 <template>
+  <!-- <CartComponent /> -->
   <main class="bg-[#131318] h-screen w-screen flex">
     <SidebarComponent class="" />
     <div class="order-card">
@@ -102,19 +104,19 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     </div>
 
-  <div class="container-pedido">
+  <!--<div class="container-pedido">
     <h1>Estado del Pedido</h1>
     <span id="estado">Pendiente</span>
 
 
-    <!-- Simulación de datos del pedido -->
+     Simulación de datos del pedido
     <div id="pedido-info">
       <p><strong>ID:</strong> <span id="pedido-id">12345</span></p>
       <p><strong>Estado:</strong> <span id="estado">Entregado</span></p>
 
       <span id="resena">Sí</span>
 
-      <!-- Sección de calificación (se muestra solo si cumple condiciones) -->
+       Sección de calificación (se muestra solo si cumple condiciones)
       <div id="seccion-calificacion" class="hidden">
         <h2>¡Califica tu experiencia!</h2>
 
@@ -135,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ¡Gracias por tu calificación!
       </div>
     </div>
-  </div>
+  </div>-->
   </main>
 </template>
 

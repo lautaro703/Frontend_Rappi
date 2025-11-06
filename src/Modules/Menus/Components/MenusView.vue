@@ -43,9 +43,9 @@ async function agregar(item) {
   <div class="flex">
     <SidebarComponent />
 
-    <div class="w-screen h-screen overflow-auto">
- 
-      <div class="relative w-full max-w-[1145px] h-[250px] mt-5 rounded-2xl">
+    <div class="w-screen h-screen overflow-auto pr-5">
+
+      <div class="relative w-full h-[250px] mt-5 rounded-2xl">
         <div class="containerRestaurante">
           <div class="contenido">
             <h1 class="titulo">La Trattoria di Luc</h1>
@@ -55,14 +55,14 @@ async function agregar(item) {
         </div>
       </div>
 
-   <div class="relative w-full max-w-[1145px] mt-8 rounded-2xl">
+   <div class="relative w-full  m-auto mt-8 rounded-2xl">
 
     <div v-for="categoria in categorias" :key="categoria.id" class="mb-10">
      <h2 class="categoriaDiseño">{{ categoria.name }}</h2>
 
-       <div class="flex flex-wrap w-full justify-between gap-[30px] max-w-[1145px] mt-3">
+       <div class="flex flex-wrap w-full justify-between gap-[30px] mt-3">
          <div class="opcion" v-for="item in categoria.items" :key="item.id">
-          
+
           <div class="w-full h-[135px] bg-[#2C2C34] rounded-2xl mb-4"></div>
            <div class="info">
             <h3><strong>{{ item.name }}</strong></h3>
@@ -103,7 +103,6 @@ async function agregar(item) {
 .containerRestaurante {
   position: absolute;
   width: 100%;
-  max-width: 1460px;
   height: 250px;
   background-color: #1b1b22;
   border-radius: 16px;

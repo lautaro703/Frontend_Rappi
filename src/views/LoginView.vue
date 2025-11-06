@@ -1,25 +1,22 @@
 <script setup>
 import { ref } from 'vue';
-import axios from 'axios';
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/store/auth';
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const loading = ref(false)
 const router = useRouter()
+const auth = useAuthStore()
 
 const handleLogin = async () => {
   loading.value = true
   error.value = ''
   try {
-    const {data} = await axios.post('http://localhost:3000/api/auth/login', {
-      email: email.value,
-      password: password.value,
-  }
-)
-localStorage.setItem('token', data.token)
-router.push('/restaurantes')
+    const data = await auth.login(email.value, password.value)
+    console.log('Usuario Logueado: ', data)
+    router.push('/restaurantes')
   } catch (err) {
     error.value = err.response.data.message || 'An error occurred'
   } finally {

@@ -1,6 +1,13 @@
 <script setup></script>
 
 <template>
+
+  <div class="h-screen w-screen bg-gray-950 opacity-50 absolute z-1" />
+
+  <div  class=" flex justify-center">
+
+
+
   <div class="carrito-container">
     <h1 class="title">Carrito</h1>
 
@@ -53,14 +60,19 @@
       <button class="btn-buy">COMPRAR</button>
     </div>
   </div>
+  </div>
+
 </template>
 
 <style scoped>
 .carrito-container {
+  z-index: 2;
+  position: absolute;
   width: 30%;
   background-color: #1a1a1a;
   color: #fff;
-  min-height: 100vh;
+  top: 5%;
+  max-height: 900px;
   padding: 1.5rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   display: flex;

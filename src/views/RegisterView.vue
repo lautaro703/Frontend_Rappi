@@ -3,24 +3,23 @@ import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const phone = ref('')
+const form = ref({
+  name: '',
+  email: '',
+  password: '',
+  role: 'CLIENT',
+  phone: '',
+})
 const loading = ref(false)
 const error = ref('')
 const router = useRouter()
+
 
 const EnviarUser = async () => {
   error.value = ''
   loading.value = true
   try {
-    const {data} = await axios.post('http://localhost:3000/api/auth/register', {
-      name: name.value,
-      email: email.value,
-      password: password.value,
-      phone: phone.value
-    })
+    const {data} = await axios.post('http://localhost:3000/api/auth/register', form.value)
     if (data.access_token) {
       localStorage.setItem('token', data.access_token)
       router.push('/')
@@ -34,7 +33,6 @@ const EnviarUser = async () => {
     loading.value = false
   }
 }
-
 
 </script>
 
@@ -50,35 +48,52 @@ const EnviarUser = async () => {
         class=" flex flex-col items-center gap-12">
           <div class="flex flex-col gap-5">
             <input
-              v-model="name"
+              v-model="form.name"
               class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
               placeholder="Username"
               type="text"
               required
             />
+
             <input
-              v-model="password"
+              v-model="form.password"
               class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
               type="password"
               placeholder="Password"
               required
               minlength="6"
             />
+
             <input
-              v-model="email"
+              v-model="form.email"
               class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
               placeholder="Email"
               type="email"
               required
             />
+
+            <select
+            v-model="form.role"
+            required
+            class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
+            >
+              <option class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
+              value="CLIENT">Client</option>
+              <option class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
+              value="VENDOR">Vendor</option>
+              <option class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
+              value="DRIVER">Driver</option>
+            </select>
+
             <input
-              v-model="phone"
+              v-model="form.phone"
               class="bg-[#2C2C34] rounded-md w-[600px] h-[70px] opacity-50 text-white pl-[30px] text-[30px] font-lora font-normal"
               type="tel"
               placeholder="+54 9 11 1234-5478"
               pattern="^\+?\d{1,3}?[\s-]?\(?\d+\)?[\s-]?\d{3,4}[\s-]?\d{3,4}$"
               required
             />
+
           </div>
           <button class="bg-[#FF7043] w-[330px] h-20 rounded-xl" type="submit">
             <p class="font-lora text-[36px] text-white font-medium">Sign Up</p>
