@@ -40,12 +40,19 @@ onMounted(fetchUserOrders)
         <div class="col status">
           <span class="status-text">{{ order.status }}</span>
           <div class="flex gap-4">
-            <button class="btn details">DETALLES</button>
-            <title>Sistema de Calificación</title>
-
-            <button class="btn cancel">CANCELAR</button>
+            <div v-if="auth.user?.role === 'CLIENT'">
+             <button class="btn details"@click="DetallesPedido" >DETALLES</button>
+             <title>Sistema de Calificación</title>
+             <button class="btn cancel" @click="CancelarPedidoCliente">CANCELAR</button>
+            </div>
+            <div v-else-if="auth.user?.role === 'DRIVER'">
+             <div class="btn details" @click="AceptarPedido">ACEPTAR</div>button>
+             <title>Sistema de Calificación</title>
+             <button class="btn cancel" @click="CancelarPedido">CANCELAR</button>
+            </div>
           </div>
-        </div>
+          </div>
+          </div>
       </div>
     </div>
   </main>

@@ -38,6 +38,31 @@ async function agregar(item) {
   cantidades.value[item.id] = 0
 }
 
+const menuStore = useAuthStore()
+const cargando = ref(false)
+
+const eliminarMenuItem = async (categoriaId, itemId) => {
+  if (!confirm('¿Estás seguro de eliminar este producto?')) return
+
+  cargando.value = true
+
+  try {
+    // Llamada a la API con Axios
+    await axios.delete(`/api/menus/categorias/${categoriaId}/items/${itemId}`)
+
+    // Actualizar el store (Pinia) para reflejar el cambio en la UI
+    menuStore.eliminarItem(categoriaId, itemId)
+
+    alert('Producto eliminado correctamente')
+  } catch (error) {
+    console.error('Error al eliminar el menú:', error)
+    const mensaje = error.response?.data?.message || 'No se pudo eliminar el producto'
+    alert(mensaje)
+  } finally {
+    cargando.value = false
+  }
+}
+
 </script>
 
 <template>
@@ -81,6 +106,18 @@ async function agregar(item) {
            <span class="cantidad">{{ cantidades[item.id] }}</span>
            <button @click="suma(item.id)" class="flecha">▶</button>
            <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
+          </div>
+          <div v-if="auth.user?.role === 'VENDOR'">
+
+            <div v-if="cargando" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-4 rounded-lg shadow-lg">
+        <p class="text-lg">Eliminando...</p>
+      </div>
+    </div>
+
+
+
+            <button @click="eliminarMenuItem(categoria.id, item.id)">Eliminar</button>
           </div>
          </div>
         </div>

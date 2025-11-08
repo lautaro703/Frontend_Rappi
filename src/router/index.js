@@ -31,6 +31,16 @@ const routes = [
       component: () => import('../Modules/Menus/Components/MenusView.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/modificacionU',
+      name: 'modificacion',
+      component: () => import('../Modules/ModificacionUsuario/Components/UsuarioModificacion.vue')
+    },
+    {
+      path: '/cartaModificacion',
+      name: 'modificar',
+      component: () => import('../components/Vistamodificar.vue')
+    }
 ]
 
 const router = createRouter({
