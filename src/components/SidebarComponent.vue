@@ -45,9 +45,8 @@ const logout = () => {
           </div>
       </div>
     </div>
-
     <div class="profile">
-      <div class="status"></div>
+      <a class="status" href="/modificacionU"></a>
       <div class="info">
         <div class="name">{{ auth.user?.name }}</div>
       </div>
