@@ -6,8 +6,6 @@
 
   <div  class=" flex justify-center">
 
-
-
   <div class="carrito-container">
     <h1 class="title">Carrito</h1>
 

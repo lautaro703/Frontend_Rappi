@@ -1,7 +1,31 @@
 <script setup>
 //import CartComponent from '@/components/CartComponent.vue';
+import api from '@/api';
 import SidebarComponent from '@/components/SidebarComponent.vue'
+import { useAuthStore } from '@/store/auth';
+import { ref } from 'vue';
 
+const auth = useAuthStore()
+
+const pedidoDatos = ref({
+ items:{
+   id:'',
+   restaurantName: '',
+   total: '',
+   status:''
+ }
+});
+
+async function CancelarPedidoCliente() {
+  try
+  {
+   const respuesta = await api.put('/order/',pedidoDatos.value)
+  }
+  catch(error)
+  {
+   console.log(error)
+  }
+}
 //document.addEventListener("DOMContentLoaded", () => {
 //  const estado = document.getElementById("estado").textContent.trim();
 //  const tieneResenaTexto = document.getElementById("resena").textContent.trim();
@@ -89,20 +113,26 @@ import SidebarComponent from '@/components/SidebarComponent.vue'
         <div class="col">Estado</div>
       </div>
       <div class="order-row">
-        <p class="col">La Trattoria di Luc</p>
+        <p class="col">{{ pedidoDatos.restaurantName }}</p>
         <p class="col tracking">34597862478</p>
-        <p class="col price">$10.800</p>
+        <p class="col price">{{ pedidoDatos.total }}</p>
         <div class="col status">
-          <span class="status-text">En Camino</span>
+          <span class="status-text">{{ pedidoDatos.status }}</span>
           <div class="flex gap-4">
-            <button class="btn details">DETALLES</button>
-            <title>Sistema de Calificación</title>
-
-            <button class="btn cancel">CANCELAR</button>
+            <div v-if="auth.user?.role === 'CLIENT'">
+             <button class="btn details"@click="DetallesPedido" >DETALLES</button>
+             <title>Sistema de Calificación</title>
+             <button class="btn cancel" @click="CancelarPedidoCliente">CANCELAR</button>
+            </div>
+            <div v-else-if="auth.user?.role === 'DRIVER'">
+             <div class="btn details" @click="AceptarPedido">ACEPTAR</div>button>
+             <title>Sistema de Calificación</title>
+             <button class="btn cancel" @click="CancelarPedido">CANCELAR</button>
+            </div>
           </div>
-        </div>
+          </div>
+          </div>
       </div>
-    </div>
 
   <!--<div class="container-pedido">
     <h1>Estado del Pedido</h1>
