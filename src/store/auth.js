@@ -4,7 +4,7 @@ import api from '@/api' // ✅ ahora sí va a funcionar
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: localStorage.getItem('token') || null,
-    user: null,
+    user: JSON.parse(localStorage.getItem('user')) || null,
   }),
 
   getters: {
@@ -19,11 +19,10 @@ export const useAuthStore = defineStore('auth', {
         this.token = data.access_token
         localStorage.setItem('token', this.token)
 
-        const decoded = JSON.parse(atob(this.token.split('.')[1]))
-        const id = decoded.sub
-
-        const { data: userData } = await api.get(`/users/${id}`)
+        const { data: userData } = await api.get(`/users/profile`)
         this.user = userData
+        localStorage.setItem('user', JSON.stringify(userData))
+
       } catch (error) {
         throw new Error(error.response?.data?.message || 'Login Failed')
       }
@@ -33,6 +32,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.user = null
       localStorage.removeItem('token')
+      localStorage.removeItem('user')
     },
   },
 })
