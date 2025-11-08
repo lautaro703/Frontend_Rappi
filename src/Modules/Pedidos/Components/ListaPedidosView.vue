@@ -1,84 +1,29 @@
 <script setup>
-//import CartComponent from '@/components/CartComponent.vue';
+import api from '@/api';
 import SidebarComponent from '@/components/SidebarComponent.vue'
+import { onMounted, ref } from 'vue';
 
-//document.addEventListener("DOMContentLoaded", () => {
-//  const estado = document.getElementById("estado").textContent.trim();
-//  const tieneResenaTexto = document.getElementById("resena").textContent.trim();
-//
-//  // Detectar si ya tiene reseña (puede decir "Sí", "Sí (4 estrellas)", etc.)
-//  const tieneResena = tieneResenaTexto !== "No";
-//
-//  const seccionCalificacion = document.getElementById("seccion-calificacion");
-//
-//  // Mostrar solo si está "Entregado" y NO tiene reseña
-//  if (estado === "Entregado" && !tieneResena) {
-//    seccionCalificacion.classList.remove("hidden");
-//  } else {
-//    seccionCalificacion.classList.add("hidden");
-//  }
-//
-//  // === Sistema de estrellas ===
-//  const stars = document.querySelectorAll(".star");
-//  const calificacionTexto = document.getElementById("calificacion-texto");
-//  let calificacionSeleccionada = 0;
-//
-//  stars.forEach(star => {
-//    star.addEventListener("mouseover", () => {
-//      const value = parseInt(star.dataset.value);
-//      resaltarEstrellas(value);
-//    });
-//
-//    star.addEventListener("click", () => {
-//      calificacionSeleccionada = parseInt(star.dataset.value);
-//      calificacionTexto.textContent = calificacionSeleccionada;
-//      resaltarEstrellas(calificacionSeleccionada, true);
-//    });
-//
-//    star.addEventListener("mouseout", () => {
-//      resaltarEstrellas(calificacionSeleccionada, true);
-//    });
-//  });
-//
-//  function resaltarEstrellas(hasta, permanente = false) {
-//    stars.forEach(s => {
-//      const value = parseInt(s.dataset.value);
-//      if (permanente) {
-//        s.classList.toggle("selected", value <= hasta);
-//      } else {
-//        s.classList.toggle("hovered", value <= hasta);
-//      }
-//    });
-//  }
-//
-//  // === Enviar calificación ===
-//  document.getElementById("enviar-calificacion").addEventListener("click", () => {
-//    if (calificacionSeleccionada === 0) {
-//      alert("Por favor, selecciona una calificación con las estrellas.");
-//      return;
-//    }
-//
-//    const comentario = document.getElementById("comentario").value.trim();
-//
-//    // Simular envío
-//    console.log("Calificación enviada:", {
-//      estrellas: calificacionSeleccionada,
-//      comentario: comentario || "Sin comentario"
-//    });
-//
-//    // Actualizar UI para indicar que ya tiene reseña
-//    document.getElementById("resena").textContent = `Sí (${calificacionSeleccionada} estrellas)`;
-//
-//    // Ocultar formulario y mostrar éxito
-//    seccionCalificacion.classList.add("hidden");
-//    document.getElementById("mensaje-exito").classList.remove("hidden");
-//  });
-//});
+const orders = ref([])
+const loading = ref(true)
+const error = ref(null)
 
+
+const fetchUserOrders = async () => {
+  try {
+    const { data } = await api.get(`/order/me`)
+    orders.value = data
+  } catch (err) {
+    console.error('Error obteniendo ordenes:', err)
+    error.value = 'No se pudieron cargar tus pedidos.'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(fetchUserOrders)
 </script>
 
 <template>
-  <!-- <CartComponent /> -->
   <main class="bg-[#131318] h-screen w-screen flex">
     <SidebarComponent class="" />
     <div class="order-card">
@@ -88,12 +33,12 @@ import SidebarComponent from '@/components/SidebarComponent.vue'
         <div class="col">Precio</div>
         <div class="col">Estado</div>
       </div>
-      <div class="order-row">
-        <p class="col">La Trattoria di Luc</p>
-        <p class="col tracking">34597862478</p>
-        <p class="col price">$10.800</p>
+      <div class="order-row" v-for="order in orders" :key="order.id">
+        <p class="col">{{ order.restaurantName }}</p>
+        <p class="col tracking">{{ order.id }}</p>
+        <p class="col price">{{ order.total }}</p>
         <div class="col status">
-          <span class="status-text">En Camino</span>
+          <span class="status-text">{{ order.status }}</span>
           <div class="flex gap-4">
             <button class="btn details">DETALLES</button>
             <title>Sistema de Calificación</title>
@@ -103,41 +48,6 @@ import SidebarComponent from '@/components/SidebarComponent.vue'
         </div>
       </div>
     </div>
-
-  <!--<div class="container-pedido">
-    <h1>Estado del Pedido</h1>
-    <span id="estado">Pendiente</span>
-
-
-     Simulación de datos del pedido
-    <div id="pedido-info">
-      <p><strong>ID:</strong> <span id="pedido-id">12345</span></p>
-      <p><strong>Estado:</strong> <span id="estado">Entregado</span></p>
-
-      <span id="resena">Sí</span>
-
-       Sección de calificación (se muestra solo si cumple condiciones)
-      <div id="seccion-calificacion" class="hidden">
-        <h2>¡Califica tu experiencia!</h2>
-
-        <div class="ratingdetails">
-          <span class="star" data-value="5">★</span>
-          <span class="star" data-value="4">★</span>
-          <span class="star" data-value="3">★</span>
-          <span class="star" data-value="2">★</span>
-          <span class="star" data-value="1">★</span>
-        </div>
-        <p>Calificación: <span id="calificacion-texto">0</span> estrellas</p>
-
-        <textarea id="comentario" placeholder="Escribe tu comentario (opcional)" rows="4"></textarea>
-        <button id="enviar-calificacion">Enviar Calificación</button>
-      </div>
-
-      <div id="mensaje-exito" class="hidden success">
-        ¡Gracias por tu calificación!
-      </div>
-    </div>
-  </div>-->
   </main>
 </template>
 

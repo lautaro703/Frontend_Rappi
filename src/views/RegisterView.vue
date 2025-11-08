@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import api from '@/api'
 
 const form = ref({
   name: '',
@@ -19,7 +19,7 @@ const EnviarUser = async () => {
   error.value = ''
   loading.value = true
   try {
-    const {data} = await axios.post('http://localhost:3000/api/auth/register', form.value)
+    const {data} = await api.post('/auth/register', form.value)
     if (data.access_token) {
       localStorage.setItem('token', data.access_token)
       router.push('/')

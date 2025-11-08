@@ -72,6 +72,7 @@
   background-color: #1a1a1a;
   color: #fff;
   top: 5%;
+  left: 50%;
   max-height: 900px;
   padding: 1.5rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

@@ -3,6 +3,10 @@
 
 import { useAuthStore } from '@/store/auth'
 import { useRouter } from 'vue-router'
+import CartComponent from './CartComponent.vue'
+import { ref } from 'vue'
+
+const cartAppared = ref(false)
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -16,6 +20,7 @@ const logout = () => {
 </script>
 
 <template>
+  <CartComponent v-if="cartAppared"/>
   <main class="sidebar">
     <div class="sidebar-content flex items-start">
       <div class="flex gap-[25px] justify-center items-center">
@@ -52,8 +57,8 @@ const logout = () => {
         <div class="name">{{ auth.user?.name }}</div>
       </div>
       <div class="flex gap-3">
-          <img class="w-6 h-6" @click="logout" src="/public//cart.png" />
-          <img class="w-6 h-6" @click="logout" src="/public/LogOut.png" />
+          <img class="w-6 h-6" @click="cartAppared = !cartAppared" src="/public/cart.png" />
+          <img class="w-6 h-6" @click="logout" src="/public//LogOut.png" />
       </div>
     </div>
   </main>

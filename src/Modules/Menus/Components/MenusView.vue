@@ -2,14 +2,15 @@
 import SidebarComponent from '@/components/SidebarComponent.vue'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
-import axios from 'axios'
+import api from '@/api';
+
 
 const categorias = ref([]);
 const cantidades = ref({})
 
 onMounted(async () => {
   try{
-    const respuesta = await axios.get("http://localhost:3000/api/menus")
+    const respuesta = await api.get("/menus")
     categorias.value = respuesta.data
 
    categorias.value.forEach(cat => {
