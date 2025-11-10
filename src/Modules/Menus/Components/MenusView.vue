@@ -3,7 +3,7 @@ import SidebarComponent from '@/components/SidebarComponent.vue'
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import api from '@/api';
-
+import { useAuthStore } from '@/store/auth';
 
 const categorias = ref([]);
 const cantidades = ref({})
@@ -38,7 +38,7 @@ async function agregar(item) {
   cantidades.value[item.id] = 0
 }
 
-const menuStore = useAuthStore()
+const auth = useAuthStore()
 const cargando = ref(false)
 
 const eliminarMenuItem = async (categoriaId, itemId) => {
@@ -48,10 +48,10 @@ const eliminarMenuItem = async (categoriaId, itemId) => {
 
   try {
     // Llamada a la API con Axios
-    await axios.delete(`/api/menus/categorias/${categoriaId}/items/${itemId}`)
+    await api.delete(`/menus/categorias/${categoriaId}/items/${itemId}`)
 
     // Actualizar el store (Pinia) para reflejar el cambio en la UI
-    menuStore.eliminarItem(categoriaId, itemId)
+    auth.eliminarItem(categoriaId, itemId)
 
     alert('Producto eliminado correctamente')
   } catch (error) {
@@ -66,65 +66,53 @@ const eliminarMenuItem = async (categoriaId, itemId) => {
 </script>
 
 <template>
-  <div class="flex">
-    <SidebarComponent />
-
-    <div class="w-screen h-screen overflow-auto pr-5">
-
-      <div class="relative w-full h-[250px] mt-5 rounded-2xl">
-        <div class="containerRestaurante">
-          <div class="contenido">
-            <h1 class="titulo">La Trattoria di Luc</h1>
-            <p class="subtitulo">Sabores que iluminan el alma</p>
-            <button class="volver"><RouterLink to="/restaurantes">◀</RouterLink></button>
-          </div>
+<div class="flex">
+  <SidebarComponent />
+  <div class="w-screen h-screen overflow-auto pr-5">
+    <div class="relative w-full h-[250px] mt-5 rounded-2xl">
+      <div class="containerRestaurante">
+        <div class="contenido">
+          <h1 class="titulo">La Trattoria di Luc</h1>
+          <p class="subtitulo">Sabores que iluminan el alma</p>
+          <button class="volver"><RouterLink to="/restaurantes">◀</RouterLink></button>
         </div>
       </div>
-
-   <div class="relative w-full  m-auto mt-8 rounded-2xl">
-
-    <div v-for="categoria in categorias" :key="categoria.id" class="mb-10">
-     <h2 class="categoriaDiseño">{{ categoria.name }}</h2>
-
-       <div class="flex flex-wrap w-full justify-between gap-[30px] mt-3">
-         <div class="opcion" v-for="item in categoria.items" :key="item.id">
-
-          <div class="w-full h-[135px] bg-[#2C2C34] rounded-2xl mb-4"></div>
-           <div class="info">
-            <h3><strong>{{ item.name }}</strong></h3>
-            <p>{{ item.description }}</p>
-
-            <div class="precio">
-              <h2>${{ item.price }}</h2>
-              <p>{{ item.calories }} cal</p>
-              <span class="disponible">{{ item.available }}</span>
+    </div>
+    <div class="relative w-full  m-auto mt-8 rounded-2xl">
+      <div v-for="categoria in categorias" :key="categoria.id" class="mb-10">
+        <h2 class="categoriaDiseño">{{ categoria.name }}</h2>
+        <div class="flex flex-wrap w-full justify-between gap-[30px] mt-3">
+          <div class="opcion" v-for="item in categoria.items" :key="item.id">
+            <div class="w-full h-[135px] bg-[#2C2C34] rounded-2xl mb-4"></div>
+            <div class="info">
+              <h3><strong>{{ item.name }}</strong></h3>
+              <p>{{ item.description }}</p>
+              <div class="precio">
+                <h2>${{ item.price }}</h2>
+                <p>{{ item.calories }} cal</p>
+                <span span class="disponible">{{ item.available }}</span>
+              </div>
             </div>
-           </div>
-
-          <div class="acciones">
-           <button @click="resta(item.id)" class="flecha">◀</button>
-           <span class="cantidad">{{ cantidades[item.id] }}</span>
-           <button @click="suma(item.id)" class="flecha">▶</button>
-           <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
+            <div class="acciones">
+              <button @click="resta(item.id)" class="flecha">◀</button>
+              <span class="cantidad">{{ cantidades[item.id] }}</span>
+              <button @click="suma(item.id)" class="flecha">▶</button>
+              <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
+            </div>
+            <div v-if="auth.user?.role === 'VENDOR'">
+              <div v-if="cargando" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-white p-4 rounded-lg shadow-lg">
+                  <p class="text-lg">Eliminando...</p>
+                </div>
+              </div>
+              <button @click="eliminarMenuItem(categoria.id, item.id)">Eliminar</button>
+            </div>
           </div>
-          <div v-if="auth.user?.role === 'VENDOR'">
-
-            <div v-if="cargando" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white p-4 rounded-lg shadow-lg">
-        <p class="text-lg">Eliminando...</p>
-      </div>
-    </div>
-
-
-
-            <button @click="eliminarMenuItem(categoria.id, item.id)">Eliminar</button>
-          </div>
-         </div>
         </div>
       </div>
     </div>
-   </div>
   </div>
+</div>
 </template>
 
 <style scoped>

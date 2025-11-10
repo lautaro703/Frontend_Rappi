@@ -14,6 +14,7 @@ const handleLogin = async () => {
   loading.value = true
   error.value = ''
   try {
+    await auth.logout()
     const data = await auth.login(email.value, password.value)
     console.log('Usuario Logueado: ', data)
     router.push('/restaurantes')
