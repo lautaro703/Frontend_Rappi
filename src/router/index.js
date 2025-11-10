@@ -34,12 +34,12 @@ const routes = [
     {
       path: '/modificacionU',
       name: 'modificacion',
-      component: () => import('../Modules/ModificacionUsuario/Components/UsuarioModificacion.vue')
+      component: () => import('../Modules/ModificacionUsuario/Components/UsuarioModificacionView.vue')
     },
     {
       path: '/cartaModificacion',
       name: 'modificar',
-      component: () => import('../components/Vistamodificar.vue')
+      component: () => import('../components/FormAddressComponent.vue')
     }
 ]
 

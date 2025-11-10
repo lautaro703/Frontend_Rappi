@@ -4,9 +4,9 @@
 
   <div class="h-screen w-screen bg-gray-950 opacity-50 absolute z-1" />
 
-  <div  class=" flex justify-center">
+  <div  class=" h-screen w-screen flex absolute z-1 justify-center items-center">
 
-  <div class="carrito-container">
+  <div class="absolute w-[30%] bg-[#1a1a1a] z-2 max-h-[900px] p-6 flex flex-col gap-6 rounded-xl text-white">
     <h1 class="title">Carrito</h1>
 
     <div class="item-card">
@@ -63,21 +63,6 @@
 </template>
 
 <style scoped>
-.carrito-container {
-  z-index: 2;
-  position: absolute;
-  width: 30%;
-  background-color: #1a1a1a;
-  color: #fff;
-  top: 5%;
-  left: 50%;
-  max-height: 900px;
-  padding: 1.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
 
 .title {
   text-align: center;
