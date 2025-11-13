@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import api from '@/api' // ✅ ger: ahora sí va a funcionar (juli: El jura 💜)
+import api from '@/api'
+import axios from 'axios'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -8,9 +9,9 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   getters: {
-    isAutheticated: (state) => !!state.token, // Retorna true si hay un token (usuario logueado)
-    userRole: (state) => state.user?.role || null, // Retorna el rol del usuario o null si no hay usuario
-  },                                            // es decir, todo, menos el amor de el.
+    isAutheticated: (state) => !!state.token,
+    userRole: (state) => state.user?.role || null,
+  },
 
   actions: {
     async login(email, password) {
@@ -28,12 +29,12 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
-    logout() { //Limpia el store y también lo elimina del localStorage.
-      this.token = null // digamos que se borra como tu ex.
-      this.user = null
+    logout() {
+      useAuthStore.token = null
+      useAuthStore.user = null
       localStorage.removeItem('token')
       localStorage.removeItem('user')
-      delete api.defaults.headers.common['Authorization']
+      axios.defaults.headers.common['Authorization'] = null
     },
   },
 })

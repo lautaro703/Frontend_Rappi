@@ -47,10 +47,10 @@ const eliminarMenuItem = async (categoriaId, itemId) => {
   cargando.value = true
 
   try {
-    // Llamada a la API con Axios
-    await api.delete(`/menus/categorias/${categoriaId}/items/${itemId}`)
 
-    // Actualizar el store (Pinia) para reflejar el cambio en la UI
+    await api.delete(`/menus/items/${itemId}`)
+
+
     auth.eliminarItem(categoriaId, itemId)
 
     alert('Producto eliminado correctamente')
@@ -99,13 +99,8 @@ const eliminarMenuItem = async (categoriaId, itemId) => {
               <button @click="suma(item.id)" class="flecha">▶</button>
               <button @click="agregar(item)" class="boton_agregar">AÑADIR</button>
             </div>
-            <div v-if="auth.user?.role === 'VENDOR'">
-              <div v-if="cargando" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div class="bg-white p-4 rounded-lg shadow-lg">
-                  <p class="text-lg">Eliminando...</p>
-                </div>
-              </div>
-              <button @click="eliminarMenuItem(categoria.id, item.id)">Eliminar</button>
+            <div v-if="auth.user?.role === 'CLIENT'" class="w-full flex justify-center mt-[20px] bg-red-500 rounded-md">
+              <button @click="eliminarMenuItem(item.id)" class="px-[60px] py-[5px]">Eliminar</button>
             </div>
           </div>
         </div>

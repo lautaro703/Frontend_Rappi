@@ -39,7 +39,7 @@ const routes = [
     {
       path: '/cartaModificacion',
       name: 'modificar',
-      component: () => import('../components/FormAddressComponent.vue')
+      component: () => import('../Modules/ModificacionUsuario/Components/FormAddressComponent.vue')
     }
 ]
 

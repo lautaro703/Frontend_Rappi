@@ -28,7 +28,6 @@ async function CargarRestaurantes() {
     <div class="h-screen w-screen overflow-auto text-white pr-5">
 
       <div class="search-bar p-4 relative">
-        <!-- <span class="absolute left-8 top-1/2 transform -translate-y-1/2 text-gray-400">Search</span> -->
         <input
           v-model="busqueda"
           type="text"
@@ -61,11 +60,6 @@ async function CargarRestaurantes() {
             <p>{{ restaurante.description }}</p>
             <div class="stars">{{ restaurante.rating }}</div>
           </RouterLink>
-          <!--
-          Esto nos hizo sufrir como condenados
-          Problema? no mostraba el boton
-          Solucion? no estaba en el dto del backend.......
-          -->
           <div v-if="auth.user?.role === 'VENDOR'">
             <button class="bg-red-500 w-[100px] h-8 rounded-md">Eliminar</button>
           </div>

@@ -3,7 +3,7 @@
   import { ref, onMounted } from 'vue';
   import api from '@/api';
   import SidebarComponent from '@/components/SidebarComponent.vue';
-  import FormAddressComponent from '@/components/FormAddressComponent.vue';
+  import FormAddressComponent from '@/Modules/ModificacionUsuario/Components/FormAddressComponent.vue';
 
   const addresses = ref([])
   const showForm = ref(false)
